@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Sun, CloudSun, Moon, Car, Utensils, Zap, CheckCircle2 } from 'lucide-react';
+import { Sun, CloudSun, Moon, Car, Utensils, Zap, CheckCircle2, Bus } from 'lucide-react';
 
 const TIMELINE = [
   {
@@ -8,6 +8,7 @@ const TIMELINE = [
     icon: Sun,
     cards: [
       { id: 'm1', title: 'Drove to Work', desc: 'Commuted alone in a gas car.', category: 'transport', impact: 400, icon: Car },
+      { id: 'm5', title: 'Public Transit', desc: 'Took the bus or train.', category: 'transport', impact: 80, icon: Bus },
       { id: 'm2', title: 'Heavy Breakfast', desc: 'Ate a meat-heavy breakfast.', category: 'diet', impact: 150, icon: Utensils },
       { id: 'm3', title: 'Long Hot Shower', desc: 'Used the water heater for 20+ mins.', category: 'energy', impact: 100, icon: Zap },
       { id: 'm4', title: 'Biked to Work', desc: 'Zero emissions commute.', category: 'transport', impact: 0, icon: Car },
@@ -30,6 +31,7 @@ const TIMELINE = [
     icon: Moon,
     cards: [
       { id: 'e1', title: 'Drove Home', desc: 'Standard rush hour commute.', category: 'transport', impact: 400, icon: Car },
+      { id: 'e5', title: 'Bus/Train Home', desc: 'Public transit commute.', category: 'transport', impact: 80, icon: Bus },
       { id: 'e2', title: 'Lights On All Night', desc: 'Forgot to turn off lights/screens.', category: 'energy', impact: 80, icon: Zap },
       { id: 'e3', title: 'Vegetarian Dinner', desc: 'Eco-friendly evening meal.', category: 'diet', impact: 50, icon: Utensils },
       { id: 'e4', title: 'Carpool Home', desc: 'Shared the ride with a coworker.', category: 'transport', impact: 150, icon: Car },
