@@ -1,10 +1,22 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User } from 'lucide-react';
 
-export default function Assistant({ currentScore }) {
-  const [messages, setMessages] = useState([
-    { id: 1, text: `Hi! I'm your EcoTrack AI Assistant. Based on your assessment, your carbon score is ${currentScore}. How can I help you reduce it today?`, sender: 'ai' }
-  ]);
+export default function Assistant({ categoryData, maxCategory }) {
+  // Initial message is now tailored to the user's specific highest footprint category
+  const [messages, setMessages] = useState(() => {
+    let openingText = `Hi! I'm your Eco Assistant. I noticed that **${maxCategory}** was your highest source of carbon emissions today (${categoryData[maxCategory]} pts). `;
+    
+    if (maxCategory === 'transport') {
+      openingText += "Would you like some tips on reducing your commute footprint?";
+    } else if (maxCategory === 'diet') {
+      openingText += "Would you like to explore some lower-carbon meal options?";
+    } else {
+      openingText += "Would you like some quick tips to save energy at home?";
+    }
+
+    return [{ id: 1, text: openingText, sender: 'ai' }];
+  });
+
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
@@ -19,16 +31,20 @@ export default function Assistant({ currentScore }) {
 
   const generateAIResponse = (userText) => {
     const text = userText.toLowerCase();
+    if (text.includes('yes') || text.includes('sure') || text.includes('tips')) {
+      if (maxCategory === 'transport') return "Awesome! Try taking public transit once a week or organizing a carpool. E-bikes are also a fantastic zero-emission alternative for short errands!";
+      if (maxCategory === 'diet') return "Great! Swapping beef for chicken can halve that meal's footprint. Even better, try 'Meatless Mondays' using plant-based proteins like lentils or tofu.";
+      if (maxCategory === 'energy') return "Perfect. Unplugging devices when not in use stops 'vampire drain'. Also, setting your AC a couple of degrees warmer can save up to 10% on energy!";
+    }
+    
     if (text.includes('drive') || text.includes('car')) {
-      return "Driving is a major source of emissions. Could you try carpooling or biking for short trips? Even replacing one drive a week can save ~50 points!";
+      return "Driving is a major source of emissions. Even replacing one drive a week can save ~50 points!";
     }
     if (text.includes('eat') || text.includes('food') || text.includes('meat')) {
-      return "Diet plays a big role. Going meatless just one day a week (like Meatless Monday) can significantly lower your carbon footprint.";
+      return "Diet plays a big role. Plant-based meals generally require far less land and water to produce.";
     }
-    if (text.includes('energy') || text.includes('electricity') || text.includes('heat')) {
-      return "Try lowering your thermostat by 1-2 degrees in winter or using LED bulbs. It saves money and reduces carbon emissions.";
-    }
-    return "That's a great question! Small consistent actions like reducing waste, buying local, and saving energy all add up. Let's tackle one thing at a time.";
+    
+    return "That makes sense. Every small action counts towards a bigger goal. Let's tackle one area at a time!";
   };
 
   const handleSend = (e) => {
@@ -49,36 +65,42 @@ export default function Assistant({ currentScore }) {
   };
 
   return (
-    <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', height: '400px', overflow: 'hidden' }}>
-      <div style={{ padding: 'var(--spacing-3)', borderBottom: '1px solid rgba(0,0,0,0.1)', backgroundColor: 'var(--color-primary-light)', color: 'white', display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)' }}>
-        <Bot size={24} />
-        <h3 style={{ margin: 0, color: 'white' }}>Eco Assistant</h3>
+    <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: '500px', overflow: 'hidden' }}>
+      <div style={{ padding: 'var(--spacing-4)', borderBottom: '1px solid rgba(0,0,0,0.1)', background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-light))', color: 'white', display: 'flex', alignItems: 'center', gap: 'var(--spacing-3)' }}>
+        <div style={{ background: 'rgba(255,255,255,0.2)', padding: '8px', borderRadius: '50%' }}>
+          <Bot size={24} />
+        </div>
+        <div>
+          <h3 style={{ margin: 0, color: 'white', fontSize: '1.2rem' }}>Eco Assistant</h3>
+          <span style={{ fontSize: '0.8rem', opacity: 0.9 }}>Online</span>
+        </div>
       </div>
       
-      <div style={{ flex: 1, overflowY: 'auto', padding: 'var(--spacing-4)', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: 'var(--spacing-4)', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)', backgroundColor: 'var(--color-surface)' }}>
         {messages.map(msg => (
-          <div key={msg.id} style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-2)', alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start', maxWidth: '80%' }}>
-            {msg.sender === 'ai' && <div style={{ background: 'var(--color-primary)', color: 'white', padding: 'var(--spacing-1)', borderRadius: '50%' }}><Bot size={16} /></div>}
+          <div key={msg.id} className="animate-fade-in" style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-2)', alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start', maxWidth: '85%' }}>
+            {msg.sender === 'ai' && <div style={{ background: 'var(--color-primary-light)', color: 'white', padding: 'var(--spacing-2)', borderRadius: '50%', flexShrink: 0 }}><Bot size={18} /></div>}
             
             <div style={{
-              backgroundColor: msg.sender === 'user' ? 'var(--color-secondary)' : 'var(--color-surface)',
+              backgroundColor: msg.sender === 'user' ? 'var(--color-secondary)' : '#F1F5F9',
               color: msg.sender === 'user' ? 'white' : 'var(--color-text)',
-              padding: 'var(--spacing-2) var(--spacing-3)',
+              padding: 'var(--spacing-3) var(--spacing-4)',
               borderRadius: 'var(--radius-lg)',
               borderBottomRightRadius: msg.sender === 'user' ? 0 : 'var(--radius-lg)',
               borderBottomLeftRadius: msg.sender === 'ai' ? 0 : 'var(--radius-lg)',
-              boxShadow: 'var(--shadow-sm)'
+              boxShadow: 'var(--shadow-sm)',
+              fontSize: '0.95rem',
+              lineHeight: 1.5
             }}>
-              {msg.text}
+              {/* Simple bold text parser for markdown-like bolding in initial message */}
+              {msg.text.split('**').map((part, i) => i % 2 === 1 ? <strong key={i} style={{textTransform: 'capitalize'}}>{part}</strong> : part)}
             </div>
-            
-            {msg.sender === 'user' && <div style={{ background: 'var(--color-secondary)', color: 'white', padding: 'var(--spacing-1)', borderRadius: '50%' }}><User size={16} /></div>}
           </div>
         ))}
         {isTyping && (
            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)', alignSelf: 'flex-start' }}>
-             <div style={{ background: 'var(--color-primary)', color: 'white', padding: 'var(--spacing-1)', borderRadius: '50%' }}><Bot size={16} /></div>
-             <div className="animate-pulse" style={{ backgroundColor: 'var(--color-surface)', padding: 'var(--spacing-2) var(--spacing-3)', borderRadius: 'var(--radius-lg)' }}>
+             <div style={{ background: 'var(--color-primary-light)', color: 'white', padding: 'var(--spacing-2)', borderRadius: '50%' }}><Bot size={18} /></div>
+             <div className="animate-pulse" style={{ backgroundColor: '#F1F5F9', padding: 'var(--spacing-3) var(--spacing-4)', borderRadius: 'var(--radius-lg)', color: 'var(--color-text-muted)' }}>
                Typing...
              </div>
            </div>
@@ -86,17 +108,17 @@ export default function Assistant({ currentScore }) {
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSend} style={{ display: 'flex', padding: 'var(--spacing-3)', borderTop: '1px solid rgba(0,0,0,0.1)', backgroundColor: 'var(--color-surface)' }}>
+      <form onSubmit={handleSend} style={{ display: 'flex', padding: 'var(--spacing-4)', borderTop: '1px solid #E2E8F0', backgroundColor: 'var(--color-surface)' }}>
         <input 
           type="text" 
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask for advice..." 
+          placeholder="Type your response..." 
           className="input-field" 
-          style={{ flex: 1, marginBottom: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+          style={{ flex: 1, marginBottom: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0, borderRight: 'none' }}
         />
-        <button type="submit" className="btn btn-primary" style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}>
-          <Send size={18} />
+        <button type="submit" className="btn btn-primary" style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, padding: 'var(--spacing-2) var(--spacing-4)' }}>
+          <Send size={20} />
         </button>
       </form>
     </div>
