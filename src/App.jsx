@@ -20,7 +20,7 @@ function App() {
       <header className="glass-panel" style={{ margin: 'var(--spacing-4)', padding: 'var(--spacing-4)', display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)' }}>
         <Leaf color="var(--color-primary)" size={32} />
         <h1 style={{ margin: 0, fontSize: '1.5rem', color: 'var(--color-primary-dark)' }}>
-          EcoTrack AI
+          Ctracer
         </h1>
         {footprintScore !== null && (
           <button className="btn btn-secondary" style={{ marginLeft: 'auto' }} onClick={handleReset}>

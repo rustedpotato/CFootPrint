@@ -1,6 +1,6 @@
-# EcoTrack AI - Carbon Footprint Tracker
+# Ctracer - Carbon Footprint Tracker
 
-EcoTrack AI is a smart, dynamic web application designed to help individuals understand, track, and reduce their carbon footprint through simple actions and personalized insights.
+Ctracer is a smart, dynamic web application designed to help individuals understand, track, and reduce their carbon footprint through simple actions and personalized insights.
 
 ## Chosen Vertical
 **Sustainability** - Designing a solution that helps individuals track and reduce their carbon footprint.
