@@ -97,6 +97,15 @@ export default function Dashboard({ initialData }) {
               <span style={{ color: 'var(--color-text-muted)' }}>Highest emission area today: </span>
               <strong style={{ textTransform: 'capitalize', color: getCategoryColor(maxCategory[0]) }}>{maxCategory[0]}</strong>
             </div>
+
+            {/* Persona Category */}
+            <div style={{ marginTop: 'var(--spacing-4)', padding: 'var(--spacing-3)', backgroundColor: 'var(--color-background)', borderRadius: 'var(--radius-md)' }}>
+              <h4 style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Your Eco Persona</h4>
+              {totalScore <= 400 && <div><strong style={{ color: 'var(--color-primary)', fontSize: '1.1rem' }}>🌿 Eco Warrior</strong><p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: 0 }}>You lead an exceptionally low-carbon lifestyle!</p></div>}
+              {totalScore > 400 && totalScore <= 800 && <div><strong style={{ color: 'var(--color-primary-light)', fontSize: '1.1rem' }}>🌱 Eco Conscious</strong><p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: 0 }}>You are making great sustainable choices.</p></div>}
+              {totalScore > 800 && totalScore <= 1200 && <div><strong style={{ color: 'var(--color-warning)', fontSize: '1.1rem' }}>🚶 Average Citizen</strong><p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: 0 }}>Your footprint is typical, with room for improvement.</p></div>}
+              {totalScore > 1200 && <div><strong style={{ color: 'var(--color-danger)', fontSize: '1.1rem' }}>🔥 Carbon Heavy</strong><p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: 0 }}>Your footprint is high. Time to take action!</p></div>}
+            </div>
           </div>
         </div>
 
